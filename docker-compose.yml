@@ -17,7 +17,7 @@ services:
       - taiga_data
 
   taigaback:
-    build: taiga-back
+    build: ./taiga-back
     hostname: $HOSTNAME
     environment:
       - SECRET_KEY=$SECRET_KEY
@@ -33,7 +33,7 @@ services:
       - taiga_data
 
   taigafront:
-    build: taiga-front-dist
+    build: ./taiga-front-dist
     hostname: $HOSTNAME
     environment: 
       - HOSTNAME=$HOSTNAME
