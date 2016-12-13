@@ -1,0 +1,47 @@
+version: '2'
+services:
+  taiga_data:
+    image: tianon/true
+    volumes:
+      - './volumes/postgresql:/var/lib/postgresql/data'
+      - './volumes/media:/usr/local/taiga/media'
+      - './volumes/static:/usr/local/taiga/static'
+      - './volumes/logs:/usr/local/taiga/logs'
+
+  taiga-db:
+    image: postgres
+    environment:
+      - POSTGRES_USER$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    volumes_from:
+      - taiga_data
+
+  taigaback:
+    build: taiga-back
+    hostname: $HOSTNAME
+    environment:
+      - SECRET_KEY=$SECRET_KEY
+      - EMAIL_USE_TLS=$EMAIL_USE_TLS
+      - EMAIL_HOST=$EMAIL_HOST
+      - EMAIL_PORT=$EMAIL_PORT
+      - EMAIL_HOST_USER=$EMAIL_HOST_USER
+      - EMAIL_HOST_PASSWORD=$EMAIL_HOST_PASSWORD
+      - HOSTNAME=$HOSTNAME
+    links:
+      - taiga-db:postgres
+    volumes_from:
+      - taiga_data
+
+  taigafront:
+    build: taiga-front-dist
+    hostname: $HOSTNAME
+    environment: 
+      - HOSTNAME=$HOSTNAME
+      - VIRTUAL_PORT=$VIRTUAL_PORT
+      - VIRTUAL_HOST=$VIRTUAL_HOST
+      - LETSENCRYPT_HOST=$LETSENCRYPT_HOST
+      - LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
+    links:
+      - taigaback
+    volumes_from:
+      - taiga_data
