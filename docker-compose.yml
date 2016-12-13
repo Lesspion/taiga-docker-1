@@ -12,7 +12,7 @@ services:
   taiga-db:
     image: postgres
     environment:
-      - POSTGRES_USER$POSTGRES_USER
+      - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     volumes_from:
       - taiga_data
