@@ -1,6 +1,6 @@
 version: '2'
 services:
-  taiga_data:
+  data:
     image: tianon/true
     volumes:
       - './volumes/postgresql:/var/lib/postgresql/data'
@@ -9,13 +9,13 @@ services:
       - './volumes/logs:/usr/local/taiga/logs'
     network_mode: bridge
 
-  taiga-db:
+  db:
     image: postgres
     environment:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     volumes_from:
-      - taiga_data
+      - data
     network_mode: bridge
 
   taigaback:
@@ -30,9 +30,9 @@ services:
       - EMAIL_HOST_PASSWORD=$EMAIL_HOST_PASSWORD
       - HOSTNAME=$HOSTNAME
     links:
-      - taiga-db:postgres
+      - db:postgres
     volumes_from:
-      - taiga_data
+      - data
     network_mode: bridge
 
   taigafront:
@@ -47,5 +47,5 @@ services:
     links:
       - taigaback
     volumes_from:
-      - taiga_data
+      - data
     network_mode: bridge
