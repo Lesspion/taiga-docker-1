@@ -7,6 +7,7 @@ services:
       - './volumes/media:/usr/local/taiga/media'
       - './volumes/static:/usr/local/taiga/static'
       - './volumes/logs:/usr/local/taiga/logs'
+    network_mode: bridge
 
   taiga-db:
     image: postgres
@@ -15,6 +16,7 @@ services:
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     volumes_from:
       - taiga_data
+    network_mode: bridge
 
   taigaback:
     build: ./taiga-back
@@ -31,6 +33,7 @@ services:
       - taiga-db:postgres
     volumes_from:
       - taiga_data
+    network_mode: bridge
 
   taigafront:
     build: ./taiga-front-dist
@@ -45,3 +48,4 @@ services:
       - taigaback
     volumes_from:
       - taiga_data
+    network_mode: bridge
